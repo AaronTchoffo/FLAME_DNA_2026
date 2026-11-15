@@ -1,4 +1,4 @@
-"""FLAME DNA — fonction serverless Vercel (Python, bibliothèque standard uniquement).
+"""FLAME DNA, fonction serverless Vercel (Python, bibliothèque standard uniquement).
 
 GET  /api/chat  → {"llm": true|false, "model": "..."}  (le front sait si un LLM est branché)
 POST /api/chat  → {"answer": "...", "model": "..."}

@@ -1,4 +1,4 @@
-"""FLAME DNA — exporte nasa_catalog.db (publications NTRS) en JSON pour le front web.
+"""FLAME DNA - exporte nasa_catalog.db (publications NTRS) en JSON pour le front web.
 
 Usage : python tools/export_catalog.py --db data/research_catalog/nasa_catalog.db --out web/data
 Ajoute un score de pertinence « sécurité incendie » transparent (mots-clés pondérés).

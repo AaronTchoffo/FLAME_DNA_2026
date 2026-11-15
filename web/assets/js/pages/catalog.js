@@ -1,19 +1,19 @@
-/* FLAME DNA — Catalogue de recherche NASA : bibliothèque de publications + sites de référence
+/* FLAME DNA, Catalogue de recherche NASA : bibliothèque de publications + sites de référence
    (différent du Data Explorer, qui manipule les FICHIERS de données) */
 (function () {
   const FD = window.FD;
   const SITES = [
-    { name: "NASA Physical Sciences Informatics (PSI)", url: "https://psi.nasa.gov/", icon: "fa-database", desc: "Open repository of microgravity physical-science data — source of the SAFFIRE files.", tag: "Data" },
-    { name: "NASA Technical Reports Server (NTRS)", url: "https://ntrs.nasa.gov/", icon: "fa-file-lines", desc: "Full-text NASA papers, presentations and reports — source of this catalog.", tag: "Papers" },
+    { name: "NASA Physical Sciences Informatics (PSI)", url: "https://psi.nasa.gov/", icon: "fa-database", desc: "Open repository of microgravity physical-science data, source of the SAFFIRE files.", tag: "Data" },
+    { name: "NASA Technical Reports Server (NTRS)", url: "https://ntrs.nasa.gov/", icon: "fa-file-lines", desc: "Full-text NASA papers, presentations and reports, source of this catalog.", tag: "Papers" },
     { name: "SAFFIRE mission page", url: "https://www.nasa.gov/mission/saffire/", icon: "fa-fire-flame-curved", desc: "Overview of the Spacecraft Fire Safety Experiments flown on Cygnus.", tag: "Mission" },
-    { name: "NASA Spinoff", url: "https://spinoff.nasa.gov/", icon: "fa-earth-americas", desc: "How NASA technology — including fire-safety tech — reaches everyday life on Earth.", tag: "Earth" },
+    { name: "NASA Spinoff", url: "https://spinoff.nasa.gov/", icon: "fa-earth-americas", desc: "How NASA technology, including fire-safety tech, reaches everyday life on Earth.", tag: "Earth" },
     { name: "PSI on data.gov", url: "https://catalog.data.gov/dataset/physical-sciences-informatics-psi-system-data-repository-international-space-station-iss", icon: "fa-landmark", desc: "Federal open-data listing of the PSI ISS repository.", tag: "Open data" },
   ];
   let state = { q: "", topics: new Set(), types: new Set(), minRel: 20, sort: "relevance" };
 
   FD.pages.catalog = {
     title: "NASA Research Catalog",
-    subtitle: "A curated library of NASA publications and reference sites on microgravity combustion — ranked by their relevance to crew fire safety.",
+    subtitle: "A curated library of NASA publications and reference sites on microgravity combustion, ranked by their relevance to crew fire safety.",
     async render(view) {
       const pubs = await FD.publications();
       const topics = count(pubs, "topic"), types = count(pubs, "type");

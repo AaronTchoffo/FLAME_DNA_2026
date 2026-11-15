@@ -1,4 +1,4 @@
-/* FLAME DNA — Data Explorer : naviguer dans les FICHIERS NASA (SAFFIRE) canal par canal
+/* FLAME DNA, Data Explorer : naviguer dans les FICHIERS NASA (SAFFIRE) canal par canal
    + classement des investigations NASA de combustion en microgravité par pertinence */
 (function () {
   const FD = window.FD;
@@ -73,7 +73,7 @@
     st.channels = st.channels.filter((c) => ser.channels[c]);
     if (!st.channels.length) st.channels = ["Radiometer 1"].filter((c) => ser.channels[c]);
     const keyMetrics = ["flame_duration_s", "radiometer_rise_mw_cm2", "sample_temp_peak_c", "plume_temp_peak_c", "o2_drop_pct", "co2_rise_pct", "airflow_median_cm_s", "o2_initial_pct"];
-    const conf = { high: ["ok", "strong radiometer signal"], medium: ["warn", "moderate signal"], low: ["danger", "weak signal — interpret with care"] }[m.flame_confidence] || ["", "not resolved"];
+    const conf = { high: ["ok", "strong radiometer signal"], medium: ["warn", "moderate signal"], low: ["danger", "weak signal, interpret with care"] }[m.flame_confidence] || ["", "not resolved"];
     pane.innerHTML = `
       <section class="card" style="--i:1">
         <div class="card-head">
@@ -88,7 +88,7 @@
       </section>
 
       <section class="card" style="--i:2;margin-top:18px">
-        <div class="card-head"><div><h3>Channel viewer</h3><div class="sub">Pick channels below — the curve redraws instantly</div></div>
+        <div class="card-head"><div><h3>Channel viewer</h3><div class="sub">Pick channels below, the curve redraws instantly</div></div>
           <div style="display:flex;gap:8px;flex-wrap:wrap">
             <span class="chip ${st.normalize ? "on" : ""}" id="normChip"><i class="fa-solid fa-arrows-up-down"></i> Normalize 0–1</span>
             <span class="chip ${st.align ? "on" : ""}" id="alignChip"><i class="fa-solid fa-bolt"></i> t = 0 at ignition</span>
@@ -142,7 +142,7 @@
       const lines = ["t_s," + cols.map((c) => `"${c} (${ser.channels[c].unit})"`).join(",")];
       ser.t.forEach((t, i) => lines.push([t, ...cols.map((c) => ser.channels[c].y[i] ?? "")].join(",")));
       FD.download(`${s.slug}_downsampled.csv`, lines.join("\n"));
-      FD.toast("CSV exported", ` — ${cols.length} channels, ${ser.t.length} rows`, "ok");
+      FD.toast("CSV exported", `${cols.length} channels, ${ser.t.length} rows`, "ok");
     };
     FD.$("#toCompare").onclick = () => { FD.compareSeed = s.id; };
     draw();
@@ -153,7 +153,7 @@
     const labels = kn.criteria_labels;
     body.innerHTML = `
       <section class="card" style="--i:0;margin-bottom:18px">
-        <div class="card-head"><div><h3>Which NASA investigations matter most for crew fire safety?</h3><div class="sub">Each investigation is scored on five transparent criteria. Choose your priority — the ranking updates.</div></div><span class="card-icon"><i class="fa-solid fa-ranking-star"></i></span></div>
+        <div class="card-head"><div><h3>Which NASA investigations matter most for crew fire safety?</h3><div class="sub">Each investigation is scored on five transparent criteria. Choose your priority, the ranking updates.</div></div><span class="card-icon"><i class="fa-solid fa-ranking-star"></i></span></div>
         <div class="seg" id="focusSeg">${Object.entries(FOCUS).map(([k, v]) => `<button data-k="${k}">${v.label}</button>`).join("")}</div>
       </section>
       <div class="grid"><div class="span-8" id="invList" style="display:grid;gap:14px"></div>

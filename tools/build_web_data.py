@@ -1,4 +1,4 @@
-"""FLAME DNA — convertit les classeurs SAFFIRE (NASA PSI) en JSON pour le front web.
+"""FLAME DNA - convertit les classeurs SAFFIRE (NASA PSI) en JSON pour le front web.
 
 Usage (depuis la racine du projet FLAME_DNA_2026) :
     python tools/build_web_data.py --src "C:/Users/USER/Desktop/saffire" --out web/data
@@ -273,7 +273,7 @@ def main():
             except Exception as e:  # noqa: BLE001
                 print(f"✗ {f}: {e}")
     (out / "saffire_index.json").write_text(json.dumps({
-        "source": "NASA Physical Science Informatics — SAFFIRE I/II/III, sheet 'Calibrated Data'",
+        "source": "NASA Physical Science Informatics, SAFFIRE I/II/III, sheet 'Calibrated Data'",
         "samples": entries,
         "channel_groups": CHANNEL_GROUPS,
     }, indent=1, ensure_ascii=False))

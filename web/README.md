@@ -1,4 +1,4 @@
-# FLAME DNA — web app (Vercel-ready)
+# FLAME DNA, web app (Vercel-ready)
 
 Static front-end (HTML/CSS/JS, no framework) + one Python serverless function (`api/chat.py`, standard library only).
 

@@ -1,4 +1,4 @@
-/* FLAME DNA — routeur SPA (hash), transitions de page, menu, thème */
+/* FLAME DNA, routeur SPA (hash), transitions de page, menu, thème */
 (function () {
   "use strict";
   const FD = window.FD;
@@ -50,7 +50,7 @@
       cleanup = await page.render(view);
     } catch (e) {
       console.error(e);
-      view.innerHTML = `<div class="card empty"><i class="fa-solid fa-triangle-exclamation"></i>Unable to load this section.<br><small class="mono">${FD.esc(e.message)}</small><br><br><span class="muted">Tip: serve the folder over HTTP (e.g. <code>python -m http.server</code>) or deploy on Vercel — browsers block local JSON files opened with file://</span></div>`;
+      view.innerHTML = `<div class="card empty"><i class="fa-solid fa-triangle-exclamation"></i>Unable to load this section.<br><small class="mono">${FD.esc(e.message)}</small><br><br><span class="muted">Tip: serve the folder over HTTP (e.g. <code>python -m http.server</code>) or deploy on Vercel, browsers block local JSON files opened with file://</span></div>`;
     }
     setTimeout(() => view.classList.remove("entering"), 450);
   }
@@ -60,7 +60,7 @@
     FD.setTheme(FD.theme() === "dark" ? "light" : "dark");
   });
 
-  /* statut de surveillance partagé (menu + en-tête) — mis à jour par le moniteur global */
+  /* statut de surveillance partagé (menu + en-tête), mis à jour par le moniteur global */
   FD.on("monitor", (s) => {
     const cls = ["", "", "warn", "danger"][s.level] || "";
     const chip = FD.$("#headerStatus"), pill = FD.$("#sidebarLive");

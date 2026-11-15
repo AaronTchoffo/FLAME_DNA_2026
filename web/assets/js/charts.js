@@ -1,4 +1,4 @@
-/* FLAME DNA — mini-bibliothèque de graphiques SVG animés (sans dépendance)
+/* FLAME DNA, mini-bibliothèque de graphiques SVG animés (sans dépendance)
    - lignes / aires qui se dessinent progressivement
    - barres qui poussent, anneaux qui se remplissent, radar, sparklines */
 (function () {

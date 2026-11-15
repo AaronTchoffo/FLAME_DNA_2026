@@ -1,4 +1,4 @@
-/* FLAME DNA — Comparaison scientifique : uniquement sur les paramètres COMMUNS aux fichiers choisis,
+/* FLAME DNA, Comparaison scientifique : uniquement sur les paramètres COMMUNS aux fichiers choisis,
    avec recherche d'échantillons similaires (distance sur métriques normalisées) */
 (function () {
   const FD = window.FD;
@@ -25,7 +25,7 @@
 
   FD.pages.compare = {
     title: "Scientific Comparison",
-    subtitle: "Pick 2 to 4 burned samples — FLAME DNA compares them only on the parameters they share, and suggests the most similar experiments.",
+    subtitle: "Pick 2 to 4 burned samples. FLAME DNA compares them only on the parameters they share, and suggests the most similar experiments.",
     async render(view) {
       const idx = await FD.saffire();
       const S = idx.samples, ST = stats(S);
@@ -49,7 +49,7 @@
           const id = o.dataset.id;
           if (st.sel.includes(id)) st.sel = st.sel.filter((x) => x !== id);
           else if (st.sel.length < 4) st.sel.push(id);
-          else FD.toast("4 samples max", " — remove one first", "info");
+          else FD.toast("4 samples max", "Remove one first.", "info");
           update();
         });
       };
@@ -60,7 +60,7 @@
         const ref = S.find((s) => s.id === st.sel[0]);
         const best = S.filter((s) => !st.sel.includes(s.id)).map((s) => [s, similarity(ref, s, ST)]).sort((a, b) => b[1] - a[1])[0];
         st.sel.push(best[0].id);
-        FD.toast("Similar sample added", ` — ${best[0].id} (${Math.round(best[1] * 100)}% similar to ${ref.id})`, "ok");
+        FD.toast("Similar sample added", `${best[0].id} (${Math.round(best[1] * 100)}% similar to ${ref.id})`, "ok");
         update();
       };
       FD.$("#clearBtn").onclick = () => { st.sel = []; update(); };
@@ -68,7 +68,7 @@
       const drawBody = async () => {
         const body = FD.$("#cmpBody");
         const sel = st.sel.map((id) => S.find((s) => s.id === id));
-        if (sel.length < 2) { body.innerHTML = `<div class="card empty" style="margin-top:18px"><i class="fa-solid fa-code-compare"></i>Select at least two samples — or one, then <b>Add most similar</b>.</div>`; return; }
+        if (sel.length < 2) { body.innerHTML = `<div class="card empty" style="margin-top:18px"><i class="fa-solid fa-code-compare"></i>Select at least two samples, or one and then <b>Add most similar</b>.</div>`; return; }
         const common = CORE.filter((k) => sel.every((s) => s.metrics[k] != null));
         const commonCh = sel.map((s) => s.channels).reduce((a, b) => a.filter((c) => b.includes(c)));
         const excluded = CORE.filter((k) => !common.includes(k) && sel.some((s) => s.metrics[k] != null));
@@ -125,7 +125,7 @@
         // enseignements automatiques
         const ins = [];
         const by = (k) => [...sel].sort((a, b) => (b.metrics[k] || 0) - (a.metrics[k] || 0));
-        if (common.includes("radiometer_rise_mw_cm2")) { const o = by("radiometer_rise_mw_cm2"); const r = o[0].metrics.radiometer_rise_mw_cm2 / Math.max(0.1, o[o.length - 1].metrics.radiometer_rise_mw_cm2); ins.push(`<b>${o[0].id}</b> radiated <b>${FD.fmt(r, 1)}×</b> more heat than <b>${o[o.length - 1].id}</b> — a larger, more dangerous flame for neighbouring materials.`); }
+        if (common.includes("radiometer_rise_mw_cm2")) { const o = by("radiometer_rise_mw_cm2"); const r = o[0].metrics.radiometer_rise_mw_cm2 / Math.max(0.1, o[o.length - 1].metrics.radiometer_rise_mw_cm2); ins.push(`<b>${o[0].id}</b> radiated <b>${FD.fmt(r, 1)}×</b> more heat than <b>${o[o.length - 1].id}</b>, a larger, more dangerous flame for neighbouring materials.`); }
         if (common.includes("flame_duration_s")) { const o = by("flame_duration_s"); ins.push(`Longest-lived flame: <b>${o[0].id}</b> (${FD.fmt(o[0].metrics.flame_duration_s, 0)} s) vs. shortest <b>${o[o.length - 1].id}</b> (${FD.fmt(o[o.length - 1].metrics.flame_duration_s, 0)} s).`); }
         if (common.includes("airflow_median_cm_s")) { const fl = sel.map((s) => s.metrics.airflow_median_cm_s); if (Math.max(...fl) - Math.min(...fl) > 2) ins.push(`Airflow differs (${fl.map((f) => FD.fmt(f, 0)).join(" / ")} cm/s): in microgravity the forced flow controls oxygen supply, so part of the difference is ventilation-driven.`); else ins.push(`Same imposed airflow (~${FD.fmt(fl[0], 0)} cm/s): differences come from material, geometry or flow direction rather than ventilation.`); }
         const flows = sel.map((s) => s.meta.flow_direction).filter(Boolean);

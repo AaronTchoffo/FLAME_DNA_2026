@@ -1,4 +1,4 @@
-/* FLAME DNA — Accueil : synthèse globale des données SAFFIRE + accès rapide */
+/* FLAME DNA, Accueil : synthèse globale des données SAFFIRE + accès rapide */
 (function () {
   const FD = window.FD;
   const MISSION_COLOR = { "SAFFIRE-I": "#F36B21", "SAFFIRE-II": "#5BCFE3", "SAFFIRE-III": "#D9A441" };
@@ -6,7 +6,7 @@
 
   FD.pages.overview = {
     title: "Overview",
-    subtitle: "How do flames spread in space — and how do we stop them? Real NASA microgravity fire data, turned into safety insight.",
+    subtitle: "How do flames spread in space, and how do we stop them? Real NASA microgravity fire data, turned into safety insight.",
     async render(view) {
       const [idx, pubs] = await Promise.all([FD.saffire(), FD.publications()]);
       const S = idx.samples;
@@ -27,34 +27,34 @@
         <section class="card hero span-12" style="--i:0">
           <div>
             <span class="tag orange"><i class="fa-solid fa-satellite"></i> NASA Space Apps 2026 · Flame in free fall</span>
-            <h2 style="margin-top:12px">A fire in space doesn't rise — it <em>creeps, hides and suffocates.</em></h2>
-            <p>FLAME DNA reads the "fingerprint" of real microgravity fires recorded by NASA's SAFFIRE experiments to answer one question for every crewed habitat — spacecraft, space station, lunar base or pressurized rover:</p>
-            <div class="question-box"><i class="fa-solid fa-circle-question" style="color:var(--accent)"></i> <b>Is this material, in this habitat, under this airflow, safe — and how fast would we detect a fire?</b></div>
+            <h2 style="margin-top:12px">A fire in space doesn't rise. It <em>creeps, hides and suffocates.</em></h2>
+            <p>FLAME DNA reads the "fingerprint" of real microgravity fires recorded by NASA's SAFFIRE experiments to answer one question for every crewed habitat (spacecraft, space station, lunar base or pressurized rover):</p>
+            <div class="question-box"><i class="fa-solid fa-circle-question" style="color:var(--accent)"></i> <b>Is this material, in this habitat, under this airflow, safe, and how fast would we detect a fire?</b></div>
             <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
               <a class="btn primary" href="#/monitoring"><i class="fa-solid fa-tower-broadcast"></i> Live monitoring</a>
               <a class="btn" href="#/explorer"><i class="fa-solid fa-folder-tree"></i> Explore NASA data</a>
               <a class="btn ghost" href="#/assistant"><i class="fa-solid fa-wand-magic-sparkles"></i> Ask the AI</a>
             </div>
           </div>
-          <div class="hero-media"><img src="assets/img/flame-earth-vs-micro.jpg" alt="Candle flame on Earth (left) and in microgravity (right)"><div class="cap"><span>1 g — buoyant, yellow</span><span>µg — spherical, blue</span></div></div>
+          <div class="hero-media"><img src="assets/img/flame-earth-vs-micro.jpg" alt="Candle flame on Earth (left) and in microgravity (right)"><div class="cap"><span>1 g: buoyant, yellow</span><span>µg: spherical, blue</span></div></div>
         </section>
 
         <div class="card kpi span-3 lift" style="--i:1"><div class="kpi-top"><span class="label">SAFFIRE samples analysed</span><span class="card-icon"><i class="fa-solid fa-fire-flame-simple"></i></span></div>
-          <div class="value" data-count="${S.length}">0</div><div class="foot">3 missions · real NASA PSI files</div><div class="spark" id="spSamples"></div></div>
+          <div class="value" data-count="${S.length}">0</div><div class="foot">3 missions · real NASA PSI files</div></div>
         <div class="card kpi span-3 lift" style="--i:2"><div class="kpi-top"><span class="label">Calibrated telemetry records</span><span class="card-icon" style="background:color-mix(in srgb,var(--cyan) 15%,transparent);color:var(--cyan)"><i class="fa-solid fa-wave-square"></i></span></div>
-          <div class="value" data-count="${totalRecords}">0</div><div class="foot">${channels} sensor channels per sample</div><div class="spark" id="spRecords"></div></div>
+          <div class="value" data-count="${totalRecords}">0</div><div class="foot">${channels} sensor channels per sample</div></div>
         <div class="card kpi span-3 lift" style="--i:3"><div class="kpi-top"><span class="label">Seconds of flame measured</span><span class="card-icon" style="background:color-mix(in srgb,var(--amber) 16%,transparent);color:var(--amber)"><i class="fa-solid fa-stopwatch"></i></span></div>
-          <div class="value"><span data-count="${flameSeconds}">0</span><small>s</small></div><div class="foot">${sustained.length} samples with a resolved flame signal</div><div class="spark" id="spFlame"></div></div>
+          <div class="value"><span data-count="${flameSeconds}">0</span><small>s</small></div><div class="foot">${sustained.length} samples with a resolved flame signal</div></div>
         <div class="card kpi span-3 lift" style="--i:4">
           <div class="kpi-split">
-            <div><span class="label">NASA publications</span><div class="value" data-count="${pubs.length}">0</div><div class="spark" id="spPubs"></div></div>
+            <div><span class="label">NASA publications</span><div class="value" data-count="${pubs.length}">0</div><div class="foot">indexed from NTRS</div></div>
             <div class="sep"></div>
-            <div><span class="label">Fire-safety relevant</span><div class="value" style="color:var(--accent)" data-count="${relevantPubs}">0</div><div class="spark" id="spRel"></div></div>
+            <div><span class="label">Fire-safety relevant</span><div class="value" style="color:var(--accent)" data-count="${relevantPubs}">0</div><div class="foot">score ≥ 40 / 100</div></div>
           </div>
         </div>
 
         <section class="card span-8" style="--i:5">
-          <div class="card-head"><div><h3>Anatomy of a spacecraft fire — ${big.id}</h3><div class="sub">Radiative heat flux on the 4 radiometers · ${FD.esc(big.meta.material || "")} · ${FD.esc(big.meta.flow_direction || "")} flow ${big.meta.nominal_flow_cm_s ? "at " + big.meta.nominal_flow_cm_s + " cm/s" : ""}</div></div>
+          <div class="card-head"><div><h3>Anatomy of a spacecraft fire: ${big.id}</h3><div class="sub">Radiative heat flux on the 4 radiometers · ${FD.esc(big.meta.material || "")} · ${FD.esc(big.meta.flow_direction || "")} flow ${big.meta.nominal_flow_cm_s ? "at " + big.meta.nominal_flow_cm_s + " cm/s" : ""}</div></div>
           <div class="seg" id="anatomySeg"><button class="on" data-k="rad"><i class="fa-solid fa-sun"></i> Heat flux</button><button data-k="tc"><i class="fa-solid fa-temperature-high"></i> Sample TCs</button><button data-k="atm"><i class="fa-solid fa-lungs"></i> O₂ / CO₂</button></div></div>
           <div id="anatomy"></div>
         </section>
@@ -79,10 +79,10 @@
 
         <section class="card span-7" style="--i:9">
           <div class="card-head"><div><h3>What the data tell us</h3><div class="sub">Automatically derived from the calibrated SAFFIRE files</div></div><span class="card-icon"><i class="fa-solid fa-lightbulb"></i></span></div>
-          <div class="finding"><span class="n">01</span><p><b>Flow direction changes everything.</b> Same SIBAL fabric, same 20 cm/s airflow: concurrent spread (${s1?.id}) reached <b>${FD.fmt(s1?.metrics.radiometer_rise_mw_cm2, 0)} mW/cm²</b> versus <b>${FD.fmt(s2?.metrics.radiometer_rise_mw_cm2, 1)} mW/cm²</b> in opposed flow (${s2?.id}) — about ${FD.fmt((s1?.metrics.radiometer_rise_mw_cm2 || 0) / (s2?.metrics.radiometer_rise_mw_cm2 || 1), 0)}× more radiant heat.</p></div>
-          <div class="finding"><span class="n">02</span><p><b>Surfaces get hotter than the plume.</b> ${hottest.id} reached <b>${FD.fmt(hottest.metrics.sample_temp_peak_c, 0)} °C</b> on the sample while plume thermocouples stayed below ${FD.fmt(hottest.metrics.plume_temp_peak_c, 0)} °C — gas-temperature sensors alone would underestimate the fire.</p></div>
-          <div class="finding"><span class="n">03</span><p><b>A small fire measurably changes a cabin.</b> ${maxO2.id} consumed <b>${FD.fmt(maxO2.metrics.o2_drop_pct, 2)} %</b> O₂ of the whole Cygnus atmosphere; CO₂ rose by up to <b>${FD.fmt(Math.max(...S.map((s) => s.metrics.co2_rise_pct || 0)), 2)} %</b> — combustion products are an early, cabin-wide fire signature.</p></div>
-          <div class="finding"><span class="n">04</span><p><b>Strongest radiant fire:</b> ${strongest.id} (${FD.fmt(strongest.metrics.radiometer_rise_mw_cm2, 0)} mW/cm²) — large samples produce heat fluxes able to ignite neighbouring materials, the key scenario for habitat design.</p></div>
+          <div class="finding"><span class="n">01</span><p><b>Flow direction changes everything.</b> Same SIBAL fabric, same 20 cm/s airflow: concurrent spread (${s1?.id}) reached <b>${FD.fmt(s1?.metrics.radiometer_rise_mw_cm2, 0)} mW/cm²</b> versus <b>${FD.fmt(s2?.metrics.radiometer_rise_mw_cm2, 1)} mW/cm²</b> in opposed flow (${s2?.id}), about ${FD.fmt((s1?.metrics.radiometer_rise_mw_cm2 || 0) / (s2?.metrics.radiometer_rise_mw_cm2 || 1), 0)}× more radiant heat.</p></div>
+          <div class="finding"><span class="n">02</span><p><b>Surfaces get hotter than the plume.</b> ${hottest.id} reached <b>${FD.fmt(hottest.metrics.sample_temp_peak_c, 0)} °C</b> on the sample while plume thermocouples stayed below ${FD.fmt(hottest.metrics.plume_temp_peak_c, 0)} °C, gas-temperature sensors alone would underestimate the fire.</p></div>
+          <div class="finding"><span class="n">03</span><p><b>A small fire measurably changes a cabin.</b> ${maxO2.id} consumed <b>${FD.fmt(maxO2.metrics.o2_drop_pct, 2)} %</b> O₂ of the whole Cygnus atmosphere; CO₂ rose by up to <b>${FD.fmt(Math.max(...S.map((s) => s.metrics.co2_rise_pct || 0)), 2)} %</b>, combustion products are an early, cabin-wide fire signature.</p></div>
+          <div class="finding"><span class="n">04</span><p><b>Strongest radiant fire:</b> ${strongest.id} (${FD.fmt(strongest.metrics.radiometer_rise_mw_cm2, 0)} mW/cm²), large samples produce heat fluxes able to ignite neighbouring materials, the key scenario for habitat design.</p></div>
         </section>
 
         <section class="card span-5" style="--i:10">
@@ -100,17 +100,6 @@
       </div>`;
 
       FD.animateCounts(view);
-      // sparklines (vraies distributions)
-      const order = [...S];
-      FD.charts.spark(FD.$("#spSamples"), order.map((s) => s.metrics.duration_s), "var(--accent)");
-      FD.charts.spark(FD.$("#spRecords"), order.map((s) => s.metrics.records), "var(--cyan)", { delay: 0.2 });
-      FD.charts.spark(FD.$("#spFlame"), order.map((s) => s.metrics.flame_duration_s), "var(--amber)", { delay: 0.3 });
-      const yearCounts = {};
-      pubs.forEach((p) => { const y = +p.year; if (y) yearCounts[y] = (yearCounts[y] || 0) + 1; });
-      const ys = Object.keys(yearCounts).sort();
-      FD.charts.spark(FD.$("#spPubs"), ys.map((y) => yearCounts[y]), "var(--violet)", { delay: 0.4 });
-      FD.charts.spark(FD.$("#spRel"), pubs.slice(0, 30).map((p) => p.relevance), "var(--accent)", { delay: 0.5 });
-
       FD.charts.donut(FD.$("#donut"), { items: byMission, center: S.length, centerLabel: "samples" });
       FD.charts.ring(FD.$("#ringSustained"), { size: 118, thickness: 11, value: sustained.length / S.length, label: "resolved flame", gradient: ["#D9A441", "#F36B21"] });
       const high = S.filter((s) => s.metrics.flame_confidence === "high").length;

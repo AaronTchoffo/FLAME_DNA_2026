@@ -1,4 +1,4 @@
-/* FLAME DNA — utilitaires communs (DOM, données, animations, routeur, thème) */
+/* FLAME DNA, utilitaires communs (DOM, données, animations, routeur, thème) */
 (function () {
   "use strict";
   const FD = (window.FD = window.FD || {});
@@ -36,15 +36,15 @@
 
   /* ---------- formatage ---------- */
   FD.fmt = (v, d = 1) => {
-    if (v === null || v === undefined || Number.isNaN(v)) return "—";
+    if (v === null || v === undefined || Number.isNaN(v)) return "-";
     return Number(v).toLocaleString("en-US", { maximumFractionDigits: d, minimumFractionDigits: Math.min(d, Math.abs(v) < 10 && d > 0 ? d : 0) });
   };
-  FD.fmtInt = (v) => (v == null ? "—" : Math.round(v).toLocaleString("en-US"));
+  FD.fmtInt = (v) => (v == null ? "-" : Math.round(v).toLocaleString("en-US"));
 
   /* ---------- compteur animé : défile des valeurs avant la vraie ---------- */
   FD.countUp = (node, target, { decimals = 0, duration = 1500, prefix = "", suffix = "", delay = 0 } = {}) => {
     if (!node) return;
-    if (target === null || target === undefined || Number.isNaN(+target)) { node.textContent = "—"; return; }
+    if (target === null || target === undefined || Number.isNaN(+target)) { node.textContent = "-"; return; }
     target = +target;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const show = (v) => (node.innerHTML = prefix + FD.fmt(v, decimals) + suffix);
@@ -138,15 +138,15 @@
   /* ---------- étiquettes lisibles des métriques communes ---------- */
   FD.METRICS = {
     flame_duration_s: { label: "Flame duration", unit: "s", dec: 1, icon: "fa-stopwatch", good: "low", desc: "Time the flame signal stays above 10% of its peak after ignition (radiometers, or sample thermocouples > 100 °C when radiometers are not resolved)." },
-    radiometer_rise_mw_cm2: { label: "Radiative heat-flux rise", unit: "mW/cm²", dec: 1, icon: "fa-sun", good: "low", desc: "Peak radiometer signal above the pre-ignition baseline — a proxy for flame size and heat release." },
+    radiometer_rise_mw_cm2: { label: "Radiative heat-flux rise", unit: "mW/cm²", dec: 1, icon: "fa-sun", good: "low", desc: "Peak radiometer signal above the pre-ignition baseline, a proxy for flame size and heat release." },
     radiant_dose_mj_cm2: { label: "Radiant dose", unit: "mJ/cm²", dec: 0, icon: "fa-radiation", good: "low", desc: "Time-integrated radiometer signal above baseline during the flame." },
     sample_temp_peak_c: { label: "Peak sample temperature", unit: "°C", dec: 0, icon: "fa-temperature-high", good: "low", desc: "Maximum of the six sample-surface thermocouples (TC7–TC12)." },
     plume_temp_peak_c: { label: "Peak plume temperature", unit: "°C", dec: 1, icon: "fa-smog", good: "low", desc: "Maximum of the six downstream plume thermocouples (TC1–TC6)." },
     o2_drop_pct: { label: "O₂ consumed", unit: "% vol", dec: 3, icon: "fa-lungs", good: "low", desc: "Initial O₂ concentration minus the minimum measured in the Cygnus cabin." },
-    co2_rise_pct: { label: "CO₂ produced", unit: "% vol", dec: 3, icon: "fa-cloud", good: "low", desc: "Maximum CO₂ minus pre-test level — combustion products released into the cabin." },
+    co2_rise_pct: { label: "CO₂ produced", unit: "% vol", dec: 3, icon: "fa-cloud", good: "low", desc: "Maximum CO₂ minus pre-test level, combustion products released into the cabin." },
     pressure_rise_psia: { label: "Pressure rise", unit: "psia", dec: 3, icon: "fa-gauge-high", good: "low", desc: "Cabin pressure increase over the test (thermal expansion of cabin gas)." },
-    airflow_median_cm_s: { label: "Imposed airflow", unit: "cm/s", dec: 1, icon: "fa-wind", good: null, desc: "Median anemometer reading — the forced flow that feeds the flame in microgravity." },
-    sample_front_transit_s: { label: "Front transit (TC7→TC12)", unit: "s", dec: 1, icon: "fa-arrow-right-long", good: null, desc: "Delay between the first and last sample thermocouple peaks (> 60 °C) — an indicator of flame-front travel time." },
+    airflow_median_cm_s: { label: "Imposed airflow", unit: "cm/s", dec: 1, icon: "fa-wind", good: null, desc: "Median anemometer reading, the forced flow that feeds the flame in microgravity." },
+    sample_front_transit_s: { label: "Front transit (TC7→TC12)", unit: "s", dec: 1, icon: "fa-arrow-right-long", good: null, desc: "Delay between the first and last sample thermocouple peaks (> 60 °C), an indicator of flame-front travel time." },
     o2_initial_pct: { label: "Initial O₂", unit: "% vol", dec: 2, icon: "fa-atom", good: null, desc: "Cabin oxygen concentration before ignition." },
     pressure_mean_psia: { label: "Mean cabin pressure", unit: "psia", dec: 2, icon: "fa-compress", good: null, desc: "Average ambient pressure in the test section." },
   };

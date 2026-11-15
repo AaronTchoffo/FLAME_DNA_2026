@@ -1,4 +1,4 @@
-/* FLAME DNA — Assistant IA
+/* FLAME DNA, Assistant IA
    Moteur hybride :
    1) moteur local (toujours disponible) : détection d'intention, requêtes sur les données SAFFIRE,
       état de la surveillance en direct, base de connaissances, recherche BM25 dans les publications NASA,
@@ -84,7 +84,7 @@
       const M = FD.monitor, s = M.cur || {}, lv = ["Nominal", "Watch", "Warning", "Fire alarm"][M.level];
       const ev = M.evidence ? Object.values(M.evidence).filter((e) => e.on || e.watch).map((e) => e.txt) : [];
       out.intent = "monitor";
-      out.md = `**Live cabin status: ${lv}** (simulated · scenario *${M.scenario}* · habitat *${M.habitat}*)\n\n| Signal | Value |\n|---|---|\n| Smoke | ${FD.fmt(s.smoke, 2)} %/m |\n| CO | ${FD.fmt(s.co, 1)} ppm |\n| Rack temperature | ${FD.fmt(s.temp, 1)} °C |\n| Heat flux | ${FD.fmt(s.flux, 1)} mW/cm² |\n| O₂ | ${FD.fmt(s.o2, 2)} % |\n| Ventilation | ${FD.fmt(s.air, 1)} cm/s |\n\n${ev.length ? "Elevated signals: " + ev.join(" · ") + "." : "No signal outside its nominal band."}${M.faultSuspect ? "\n\nOnly one temperature channel deviates while smoke, CO and heat flux are clean → **likely sensor fault**, so no fire alarm." : ""}${M.level >= 2 ? "\n\n**Suggested response:** locate the source, prepare masks, then stop ventilation and remove rack power — in microgravity the airflow is what feeds the flame." : ""}\n\n*Simulated sensors — not a certified detection system.*`;
+      out.md = `**Live cabin status: ${lv}** (simulated · scenario *${M.scenario}* · habitat *${M.habitat}*)\n\n| Signal | Value |\n|---|---|\n| Smoke | ${FD.fmt(s.smoke, 2)} %/m |\n| CO | ${FD.fmt(s.co, 1)} ppm |\n| Rack temperature | ${FD.fmt(s.temp, 1)} °C |\n| Heat flux | ${FD.fmt(s.flux, 1)} mW/cm² |\n| O₂ | ${FD.fmt(s.o2, 2)} % |\n| Ventilation | ${FD.fmt(s.air, 1)} cm/s |\n\n${ev.length ? "Elevated signals: " + ev.join(" · ") + "." : "No signal outside its nominal band."}${M.faultSuspect ? "\n\nOnly one temperature channel deviates while smoke, CO and heat flux are clean → **likely sensor fault**, so no fire alarm." : ""}${M.level >= 2 ? "\n\n**Suggested response:** locate the source, prepare masks, then stop ventilation and remove rack power, in microgravity the airflow is what feeds the flame." : ""}\n\n*Simulated sensors, not a certified detection system.*`;
       out.sources.push({ t: "Open Real-Time Monitoring", u: "#/monitoring" });
       out.context.push("LIVE MONITORING: " + out.md);
       return out;
@@ -124,7 +124,7 @@
     if (sel.length === 1) {
       const s = sel[0], m = s.metrics;
       out.intent = "sample";
-      out.md = `**${s.id}** — ${s.vehicle}, ${s.year}${s.meta.material ? ` · ${s.meta.material}, ${s.meta.flow_direction} flow, ${s.meta.size_cm} cm` : ""}\n\n- Ignition at **t = ${FD.fmt(m.ignition_time_s, 0)} s**, flame signal for **${FD.fmt(m.flame_duration_s, 1)} s** (${m.flame_detection_method}, ${m.flame_confidence || "n/a"} confidence)\n- Radiative heat-flux rise **${FD.fmt(m.radiometer_rise_mw_cm2, 1)} mW/cm²**, peak at t = ${FD.fmt(m.radiometer_peak_time_s, 0)} s\n- Peak sample temperature **${FD.fmt(m.sample_temp_peak_c, 0)} °C**, plume **${FD.fmt(m.plume_temp_peak_c, 1)} °C**\n- Cabin O₂ ${FD.fmt(m.o2_initial_pct, 2)} % → −${FD.fmt(m.o2_drop_pct, 3)} %, CO₂ +${FD.fmt(m.co2_rise_pct, 3)} %\n- Imposed airflow ≈ **${FD.fmt(m.airflow_median_cm_s, 1)} cm/s**`;
+      out.md = `**${s.id}** (${s.vehicle}, ${s.year}${s.meta.material ? ` · ${s.meta.material}, ${s.meta.flow_direction} flow, ${s.meta.size_cm} cm` : ""})\n\n- Ignition at **t = ${FD.fmt(m.ignition_time_s, 0)} s**, flame signal for **${FD.fmt(m.flame_duration_s, 1)} s** (${m.flame_detection_method}, ${m.flame_confidence || "n/a"} confidence)\n- Radiative heat-flux rise **${FD.fmt(m.radiometer_rise_mw_cm2, 1)} mW/cm²**, peak at t = ${FD.fmt(m.radiometer_peak_time_s, 0)} s\n- Peak sample temperature **${FD.fmt(m.sample_temp_peak_c, 0)} °C**, plume **${FD.fmt(m.plume_temp_peak_c, 1)} °C**\n- Cabin O₂ ${FD.fmt(m.o2_initial_pct, 2)} % → −${FD.fmt(m.o2_drop_pct, 3)} %, CO₂ +${FD.fmt(m.co2_rise_pct, 3)} %\n- Imposed airflow ≈ **${FD.fmt(m.airflow_median_cm_s, 1)} cm/s**`;
       if (s.id === "SAFFIRE-I-S2") out.md += `\n\nNASA's test table reports a ~70 s burn for this opposed-flow sample; the radiometers resolve ~${FD.fmt(m.flame_duration_s, 0)} s above 10 % of peak because the opposed flame is small and dim.`;
       out.sources.push({ t: `Open ${s.id} in Data Explorer`, u: "#/explorer" });
       out.context.push("DATA: " + out.md);
@@ -156,7 +156,7 @@
         out.intent = "pubs";
         out.md = `Here is what the indexed NASA publications say:\n\n` + ex.map(({ p, sent }) => `**${p.title}** (${p.year})\n> ${sent.join(" ")}`).join("\n\n");
       } else if (ex.length) {
-        out.md += `\n\n##### Related NASA research\n` + ex.slice(0, 2).map(({ p, sent }) => `- **${p.title}** (${p.year}) — ${sent[0]}`).join("\n");
+        out.md += `\n\n##### Related NASA research\n` + ex.slice(0, 2).map(({ p, sent }) => `- **${p.title}** (${p.year}), ${sent[0]}`).join("\n");
       }
       pubs.forEach(({ p }) => { out.sources.push({ t: p.title, u: p.url }); out.context.push(`PUBLICATION ${p.title} (${p.year}): ${p.abstract.slice(0, 1200)}`); });
     }
@@ -221,7 +221,7 @@
 
   FD.pages.assistant = {
     title: "AI Assistant",
-    subtitle: "Ask in plain language — answers are grounded in the SAFFIRE data, the live monitoring state and NASA publications, with sources.",
+    subtitle: "Ask in plain language. Answers are grounded in the SAFFIRE data, the live monitoring state and NASA publications, with sources.",
     async render(view) {
       FD.publications().then((p) => (bm = bm || buildBM25(p)));
       view.innerHTML = `
@@ -239,7 +239,7 @@
         <aside style="display:grid;gap:18px;align-content:start">
           <section class="card" style="--i:1"><div class="card-head"><div><h3>Live context</h3><div class="sub">What the assistant currently sees</div></div></div><div id="ctx"></div></section>
           <section class="card" style="--i:2"><div class="card-head"><div><h3>How it thinks</h3></div></div>
-            <div class="actions-list" style="font-size:12.5px"><div>Detects the intent (data, ranking, comparison, live status, physics, papers)</div><div>Computes answers from the 13 SAFFIRE files & the monitoring engine</div><div>Retrieves NASA publications (BM25) and quotes them</div><div>Optional LLM rewrites from that context only — no invented numbers</div></div></section>
+            <div class="actions-list" style="font-size:12.5px"><div>Detects the intent (data, ranking, comparison, live status, physics, papers)</div><div>Computes answers from the 13 SAFFIRE files & the monitoring engine</div><div>Retrieves NASA publications (BM25) and quotes them</div><div>Optional LLM rewrites from that context only, no invented numbers</div></div></section>
         </aside>
       </div>`;
       const log = FD.$("#log"), ask = FD.$("#ask");
@@ -257,7 +257,7 @@
 
       const scrollDown = () => (log.scrollTop = log.scrollHeight);
       const welcome = () => {
-        log.innerHTML = `<div class="welcome"><img src="assets/img/logo.png" alt=""><h3>How can I help keep crews safe?</h3><p>I reason over real NASA microgravity fire data. Pick a question or type your own — French or English.</p>
+        log.innerHTML = `<div class="welcome"><img src="assets/img/logo.png" alt=""><h3>How can I help keep crews safe?</h3><p>I reason over real NASA microgravity fire data. Pick a question or type your own, French or English.</p>
           <div class="welcome-grid">${STARTERS.map(([i, t]) => `<button data-q="${FD.esc(t)}"><i class="fa-solid ${i}"></i>${t}</button>`).join("")}</div></div>`;
         FD.$$(".welcome-grid button", log).forEach((b) => b.onclick = () => send(b.dataset.q));
       };

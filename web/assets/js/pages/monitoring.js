@@ -1,4 +1,4 @@
-/* FLAME DNA — Surveillance temps réel (simulation physiquement cohérente)
+/* FLAME DNA, Surveillance temps réel (simulation physiquement cohérente)
    - capteurs cabine simulés, plages nominales réalistes (type ISS)
    - scénario « feu » rejoué à partir des courbes RÉELLES de SAFFIRE-I S1
    - logique d'alerte multicritère avec persistance (pas un simple seuil)
@@ -30,8 +30,8 @@
   };
   const LEVELS = [
     { name: "Nominal", short: "Cabin nominal", icon: "fa-shield-heart", text: "All signals inside their nominal bands." },
-    { name: "Watch", short: "Watch — 1 signal off-nominal", icon: "fa-eye", text: "A single signature family deviates. Plausibility check in progress (possible sensor fault or transient)." },
-    { name: "Warning", short: "Warning — pre-fire signature", icon: "fa-triangle-exclamation", text: "Two independent fire signatures agree and persist. Investigate the suspect area now." },
+    { name: "Watch", short: "Watch: 1 signal off-nominal", icon: "fa-eye", text: "A single signature family deviates. Plausibility check in progress (possible sensor fault or transient)." },
+    { name: "Warning", short: "Warning: pre-fire signature", icon: "fa-triangle-exclamation", text: "Two independent fire signatures agree and persist. Investigate the suspect area now." },
     { name: "Fire alarm", short: "FIRE ALARM", icon: "fa-fire", text: "Thermal signature confirmed together with smoke and/or combustion products." },
   ];
 
@@ -183,8 +183,8 @@
       const up = lvl > M.level;
       M.level = lvl;
       const why = Object.values(ev).filter((e) => e.on || e.watch).map((e) => e.txt).slice(0, 3).join(" · ");
-      log(`${up ? "▲" : "▼"} ${LEVELS[lvl].name}${why ? " — " + why : ""}${lvl === 1 && M.faultSuspect ? " (single-sensor deviation: possible sensor fault)" : ""}`, lvl, "state");
-      if (up && lvl >= 2) FD.toast(LEVELS[lvl].name, " — " + LEVELS[lvl].text, lvl === 3 ? "danger" : "warn", 5000);
+      log(`${up ? "▲" : "▼"} ${LEVELS[lvl].name}${why ? ": " + why : ""}${lvl === 1 && M.faultSuspect ? " (single-sensor deviation: possible sensor fault)" : ""}`, lvl, "state");
+      if (up && lvl >= 2) FD.toast(LEVELS[lvl].name, LEVELS[lvl].text, lvl === 3 ? "danger" : "warn", 5000);
     }
     FD.emit("monitor", { level: M.level, short: LEVELS[M.level].short });
   }
@@ -243,7 +243,7 @@
         </section>
 
         <section class="card span-5" style="--i:12">
-          <div class="card-head"><div><h3>Crew response</h3><div class="sub">Generic spacecraft fire-response steps — try them</div></div><span class="card-icon"><i class="fa-solid fa-user-astronaut"></i></span></div>
+          <div class="card-head"><div><h3>Crew response</h3><div class="sub">Generic spacecraft fire-response steps, try them</div></div><span class="card-icon"><i class="fa-solid fa-user-astronaut"></i></span></div>
           <div class="actions-list" id="actions"></div>
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
             <button class="btn sm" data-act="vent"><i class="fa-solid fa-fan"></i> Shut down ventilation</button>
@@ -303,7 +303,7 @@
         const L = LEVELS[M.level], b = FD.$("#banner");
         b.className = `alert-banner span-12 card lvl-${M.level}`;
         b.querySelector(".lvl-icon i").className = "fa-solid " + L.icon;
-        FD.$("#bTitle").textContent = L.name + (M.level === 1 && M.faultSuspect ? " — possible sensor fault" : "");
+        FD.$("#bTitle").textContent = L.name + (M.level === 1 && M.faultSuspect ? " (possible sensor fault)" : "");
         FD.$("#bText").textContent = L.text;
         FD.$$(".stage", b).forEach((x) => x.classList.toggle("on", +x.dataset.s <= M.level));
         ring.set(M.risk, ["var(--ok)", "var(--cyan)", "var(--warn)", "var(--danger)"][M.level]);
@@ -315,12 +315,12 @@
           const detail = keys.map((k) => `<span style="opacity:${ev[k].on ? 1 : ev[k].watch ? 0.85 : 0.5}">${ev[k].txt}</span>`).join(" · ");
           return `<div class="ev ${on ? "met" : ""} ${on && pers && M.level === 3 ? "crit" : ""}"><i class="fa-solid ${ic}" style="color:${on ? "var(--warn)" : "var(--muted)"}"></i><div><b>${name}</b><div class="muted" style="font-size:11.5px">${detail}</div></div><span class="st" style="color:${on ? (pers ? "var(--danger)" : "var(--warn)") : "var(--ok)"}">${on ? (pers ? "CONFIRMED" : "DETECTED") : "CLEAR"}</span></div>`;
         }).join("");
-        FD.$("#faultNote").innerHTML = M.faultSuspect ? `<i class="fa-solid fa-plug-circle-exclamation"></i><span><b>Plausibility check:</b> only the temperature channel deviates while smoke, CO and heat flux are clean — consistent with a <b>sensor fault</b>, so no fire alarm is raised.</span>` : `<i class="fa-solid fa-circle-info"></i><span>Watch = 1 family · Warning = 2 families for ≥ 3 s · Fire alarm = thermal + smoke or combustion products.</span>`;
+        FD.$("#faultNote").innerHTML = M.faultSuspect ? `<i class="fa-solid fa-plug-circle-exclamation"></i><span><b>Plausibility check:</b> only the temperature channel deviates while smoke, CO and heat flux are clean, consistent with a <b>sensor fault</b>, so no fire alarm is raised.</span>` : `<i class="fa-solid fa-circle-info"></i><span>Watch = 1 family · Warning = 2 families for ≥ 3 s · Fire alarm = thermal + smoke or combustion products.</span>`;
         // actions recommandées
         const steps = M.level >= 3 ? ["Sound the alarm, crew gathers at the safe haven", "Shut down ventilation in the affected module", "Remove power from the suspect rack", "Don breathing masks, monitor CO / HCN / HCl", "Discharge portable extinguisher if fire persists"]
           : M.level === 2 ? ["Locate the source with a portable combustion-products analyzer", "Prepare masks and extinguisher", "Be ready to stop ventilation & power"]
-          : M.level === 1 ? ["Cross-check the deviating sensor with neighbouring sensors", "No action on ventilation yet — avoid false-alarm cost"]
-          : ["Routine monitoring — no action required"];
+          : M.level === 1 ? ["Cross-check the deviating sensor with neighbouring sensors", "No action on ventilation yet, avoid false-alarm cost"]
+          : ["Routine monitoring, no action required"];
         FD.$("#actions").innerHTML = steps.map((x) => `<div>${x}</div>`).join("");
         FD.$$("[data-act]").forEach((btn) => {
           const k = btn.dataset.act;
@@ -357,7 +357,7 @@
     const c = SENSORS[k];
     return `<section class="card kpi sensor span-3 lift" id="sen-${k}" style="--i:${i}">
       <div class="kpi-top"><span class="label"><i class="fa-solid ${c.icon}" style="color:${c.color};margin-right:6px"></i>${c.label}</span><span class="state">nominal</span></div>
-      <div class="value"><span>—</span><small>${c.unit}</small></div>
+      <div class="value"><span>-</span><small>${c.unit}</small></div>
       <div class="bar-track"><div class="bar-fill"></div></div>
       <div class="spark"></div></section>`;
   }
